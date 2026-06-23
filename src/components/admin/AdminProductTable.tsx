@@ -22,9 +22,11 @@ type Row = {
 export default function AdminProductTable({
   products,
   categories,
+  canDelete = false,
 }: {
   products: Row[];
   categories: { id: string; name: string }[];
+  canDelete?: boolean;
 }) {
   const router = useRouter();
   const [filter, setFilter] = useState("");
@@ -96,16 +98,20 @@ export default function AdminProductTable({
                       <Link
                         href={`/admin/products/${p.id}`}
                         className="p-2 rounded-lg hover:bg-pink-50 text-[var(--color-secondary)]"
+                        title="수정"
                       >
                         <Pencil size={16} />
                       </Link>
-                      <button
-                        onClick={() => del(p.id, p.title)}
-                        disabled={busy === p.id}
-                        className="p-2 rounded-lg hover:bg-pink-50 text-[var(--color-primary)] disabled:opacity-40"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                      {canDelete && (
+                        <button
+                          onClick={() => del(p.id, p.title)}
+                          disabled={busy === p.id}
+                          className="p-2 rounded-lg hover:bg-pink-50 text-[var(--color-primary)] disabled:opacity-40"
+                          title="삭제"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>

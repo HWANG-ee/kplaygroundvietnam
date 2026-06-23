@@ -78,9 +78,9 @@ export default function Header({
                 <span className="font-semibold text-[var(--color-ink)]">
                   {fmt(t.header.hello, { name: user.name })}
                 </span>
-                {user.role === "admin" && (
-                  <Link href="/admin" className="hover:text-[var(--color-primary)]">
-                    {t.header.admin}
+                {(user.role === "admin" || user.role === "manager") && (
+                  <Link href="/admin" className="hover:text-[var(--color-primary)] font-semibold text-[var(--color-primary)]">
+                    {user.role === "admin" ? t.header.admin : t.header.manager}
                   </Link>
                 )}
                 <Link href="/mypage" className="hover:text-[var(--color-primary)]">

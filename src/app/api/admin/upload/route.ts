@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
-import { getSession } from "@/lib/auth";
+import { getSession, isStaff } from "@/lib/auth";
 
 const ALLOWED = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"];
 const MAX = 5 * 1024 * 1024; // 5MB
 
 export async function POST(req: NextRequest) {
   const session = await getSession();
-  if (!session || session.role !== "admin") {
+  if (!isStaff(session?.role)) {
     return NextResponse.json({ error: "권한이 없습니다." }, { status: 403 });
   }
 

@@ -158,6 +158,7 @@ async function main() {
 
   // users
   const adminPw = await bcrypt.hash("admin1234", 10);
+  const managerPw = await bcrypt.hash("manager1234", 10);
   const userPw = await bcrypt.hash("user1234", 10);
   await prisma.user.create({
     data: {
@@ -170,6 +171,15 @@ async function main() {
   });
   await prisma.user.create({
     data: {
+      email: "manager@kplayground.co.kr",
+      password: managerPw,
+      name: "매니저",
+      role: "manager",
+      mileage: 0,
+    },
+  });
+  await prisma.user.create({
+    data: {
       email: "user@test.com",
       password: userPw,
       name: "김덕질",
@@ -178,7 +188,7 @@ async function main() {
     },
   });
 
-  console.log(`✅ ${categories.length} categories, ${products.length} products, 2 users`);
+  console.log(`✅ ${categories.length} categories, ${products.length} products, 3 users`);
 }
 
 main()

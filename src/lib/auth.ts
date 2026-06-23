@@ -16,6 +16,18 @@ export type SessionPayload = {
   role: string;
 };
 
+// 권한 레벨: "user"(일반) < "manager"(매니저) < "admin"(관리자)
+export function isAdmin(role?: string | null) {
+  return role === "admin";
+}
+export function isManager(role?: string | null) {
+  return role === "manager";
+}
+/** 관리자 또는 매니저 (관리 페이지 접근 가능) */
+export function isStaff(role?: string | null) {
+  return role === "admin" || role === "manager";
+}
+
 export async function hashPassword(password: string) {
   return bcrypt.hash(password, 10);
 }

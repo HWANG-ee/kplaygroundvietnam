@@ -1,7 +1,7 @@
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, isStaff } from "@/lib/auth";
 import { parseJsonArray } from "@/lib/format";
 import AdminProductForm from "@/components/admin/AdminProductForm";
 
@@ -13,7 +13,7 @@ export default async function EditProductPage({
   params: Promise<{ id: string }>;
 }) {
   const user = await getCurrentUser();
-  if (!user || user.role !== "admin") redirect("/");
+  if (!isStaff(user?.role)) redirect("/");
 
   const { id } = await params;
   const [product, categories] = await Promise.all([
