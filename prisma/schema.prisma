@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("user") // "user" | "admin"
+  mileage   Int      @default(0)
+  createdAt DateTime @default(now())
+
+  orders    Order[]
+  reviews   Review[]
+  wishlist  Wishlist[]
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  slug     String    @unique
+  name     String
+  kind     String    @default("album") // "album" | "goods"
+  order    Int       @default(0)
+  products Product[]
+}
+
+model Product {
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  title        String
+  artist       String
+  description  String   @default("")
+  image        String
+  images       String   @default("[]") // JSON array of extra images
+  price        Int      // 정가 (consumer price)
+  salePrice    Int      // 판매가
+  stock        Int      @default(100)
+  versions     String   @default("[]") // JSON array of version names
+  badge        String   @default("") // "예약" | "신상" | "베스트" | "핫딜" | "재입고" | ""
+  isPreorder   Boolean  @default(false)
+  isBest       Boolean  @default(false)
+  isNew        Boolean  @default(false)
+  isHotDeal    Boolean  @default(false)
+  isRestocked  Boolean  @default(false)
+  releaseDate  DateTime?
+  createdAt    DateTime @default(now())
+
+  categoryId   String
+  category     Category @relation(fields: [categoryId], references: [id])
+
+  orderItems   OrderItem[]
+  reviews      Review[]
+  wishlist     Wishlist[]
+}
+
+model Order {
+  id          String   @id @default(cuid())
+  orderNumber String   @unique
+  status      String   @default("결제완료") // 결제완료 | 배송중 | 배송완료 | 취소
+  total       Int
+  recipient   String
+  phone       String
+  address     String
+  memo        String   @default("")
+  createdAt   DateTime @default(now())
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  items       OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  quantity  Int
+  price     Int
+  version   String  @default("")
+
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int      @default(5)
+  content   String
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+}

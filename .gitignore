@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+.env
+.env*.local
+*.db
+*.db-journal
+prisma/dev.db
+.DS_Store
+
+# 런타임 업로드 파일은 커밋하지 않음 (.gitkeep만 유지)
+/public/uploads/*
+!/public/uploads/.gitkeep
