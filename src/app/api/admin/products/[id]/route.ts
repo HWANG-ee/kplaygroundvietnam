@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getSession, isStaff, isAdmin } from "@/lib/auth";
+import { getSession, isStaff } from "@/lib/auth";
 
 export async function PUT(
   req: NextRequest,
@@ -50,10 +50,10 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  // 상품 삭제: 관리자만
+  // 상품 삭제: 매니저 + 관리자
   const session = await getSession();
-  if (!isAdmin(session?.role)) {
-    return NextResponse.json({ error: "삭제 권한은 관리자에게만 있습니다." }, { status: 403 });
+  if (!isStaff(session?.role)) {
+    return NextResponse.json({ error: "권한이 없습니다." }, { status: 403 });
   }
   const { id } = await params;
   try {

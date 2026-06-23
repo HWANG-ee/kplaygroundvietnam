@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getSession } from "@/lib/auth";
+import { getSession, isStaff } from "@/lib/auth";
 
-async function requireAdmin() {
+async function requireStaff() {
   const session = await getSession();
-  if (!session || session.role !== "admin") return null;
+  if (!isStaff(session?.role)) return null;
   return session;
 }
 
@@ -19,7 +19,7 @@ function slugify(s: string) {
 }
 
 export async function POST(req: NextRequest) {
-  if (!(await requireAdmin())) {
+  if (!(await requireStaff())) {
     return NextResponse.json({ error: "권한이 없습니다." }, { status: 403 });
   }
   try {

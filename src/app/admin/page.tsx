@@ -63,7 +63,7 @@ export default async function AdminPage() {
           <p className="text-[var(--color-muted)] text-sm mt-1">
             {admin
               ? "사이트 전체 관리 · 매출 분석"
-              : "상품 세부정보 수정 (등록/삭제·매출은 관리자 전용)"}
+              : "상품 관리 (등록·수정·삭제) · 매출 분석은 관리자 전용"}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -75,14 +75,12 @@ export default async function AdminPage() {
               <BarChart3 size={20} /> 매출 분석
             </Link>
           )}
-          {admin && (
-            <Link
-              href="/admin/products/new"
-              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[var(--color-primary)] text-white font-bold hover:bg-[var(--color-primary-dark)]"
-            >
-              <Plus size={20} /> 상품 등록
-            </Link>
-          )}
+          <Link
+            href="/admin/products/new"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[var(--color-primary)] text-white font-bold hover:bg-[var(--color-primary-dark)]"
+          >
+            <Plus size={20} /> 상품 등록
+          </Link>
         </div>
       </div>
 
@@ -98,7 +96,7 @@ export default async function AdminPage() {
 
       <h2 className="text-xl font-black mb-4">상품 목록</h2>
       <AdminProductTable
-        canDelete={admin}
+        canDelete={true}
         products={products.map((p) => ({
           id: p.id,
           slug: p.slug,

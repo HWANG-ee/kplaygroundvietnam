@@ -1,14 +1,14 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, isStaff } from "@/lib/auth";
 import AdminProductForm from "@/components/admin/AdminProductForm";
 
 export const dynamic = "force-dynamic";
 
 export default async function NewProductPage() {
   const user = await getCurrentUser();
-  if (!user || user.role !== "admin") redirect("/");
+  if (!isStaff(user?.role)) redirect("/");
 
   const categories = await prisma.category.findMany({ orderBy: { order: "asc" } });
 
