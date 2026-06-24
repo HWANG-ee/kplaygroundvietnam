@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, isStaff } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getLocale } from "@/lib/i18n/server";
 import { LOCALE_META } from "@/lib/i18n/config";
 import { MESSAGES } from "@/lib/i18n/messages";
 import { I18nProvider } from "@/components/i18n/I18nProvider";
+import { SessionProvider } from "@/components/SessionProvider";
 
 export const metadata: Metadata = {
   title: "K-PLAYGROUND · 케이플레이그라운드 | K-POP 앨범 & 굿즈샵",
@@ -36,9 +37,11 @@ export default async function RootLayout({
       </head>
       <body>
         <I18nProvider locale={locale} messages={MESSAGES[locale]}>
-          <Header user={user} categories={categories} />
-          <main className="min-h-[60vh]">{children}</main>
-          <Footer />
+          <SessionProvider isStaff={isStaff(user?.role)}>
+            <Header user={user} categories={categories} />
+            <main className="min-h-[60vh]">{children}</main>
+            <Footer />
+          </SessionProvider>
         </I18nProvider>
       </body>
     </html>

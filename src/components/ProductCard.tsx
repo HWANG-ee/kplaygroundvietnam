@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ShoppingCart, Heart, Check } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ShoppingCart, Heart, Check, Settings } from "lucide-react";
 import { useCart } from "@/store/cart";
 import { won, discountRate } from "@/lib/format";
 import type { ProductCardData } from "@/lib/types";
 import { useI18n } from "@/components/i18n/I18nProvider";
 import { badgeLabel } from "@/lib/i18n/messages";
+import { useSession } from "@/components/SessionProvider";
 
 const BADGE_STYLE: Record<string, string> = {
   예약: "bg-[var(--color-secondary)] text-white",
@@ -26,6 +28,8 @@ export default function ProductCard({
 }) {
   const add = useCart((s) => s.add);
   const { t } = useI18n();
+  const { isStaff } = useSession();
+  const router = useRouter();
   const [added, setAdded] = useState(false);
   const [liked, setLiked] = useState(false);
   const rate = discountRate(product.price, product.salePrice);
@@ -71,6 +75,21 @@ export default function ProductCard({
           <div className="absolute inset-0 grid place-items-center bg-black/45">
             <span className="text-white font-bold text-lg">{t.product.soldOut}</span>
           </div>
+        )}
+
+        {/* 관리자/매니저 전용: 빠른 수정 톱니 버튼 */}
+        {isStaff && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              router.push(`/admin/products/${product.id}`);
+            }}
+            className="absolute top-2 right-12 w-9 h-9 grid place-items-center rounded-full bg-[var(--color-ink)]/85 text-white shadow hover:scale-110 hover:bg-[var(--color-ink)] transition z-10"
+            aria-label="edit product"
+            title="상품 수정"
+          >
+            <Settings size={16} />
+          </button>
         )}
 
         <button
