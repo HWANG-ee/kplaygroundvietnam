@@ -44,15 +44,17 @@ export default function AdminSettingsForm({ initial }: { initial: Settings }) {
       setMsg("❌ " + (d.error || "저장 실패"));
       return;
     }
-    setMsg("✅ 저장되었습니다. 푸터에 바로 반영됩니다.");
+    setMsg("✅ 저장되었습니다 / Đã lưu. 바로 반영됩니다.");
     router.refresh();
   }
 
   return (
     <div className="space-y-6 max-w-2xl">
-      <Section title="📢 상단 공지 (흐르는 배너)">
+      <Section title="📢 상단 공지 (흐르는 배너) / Thông báo trên cùng">
         <p className="text-xs text-[var(--color-muted)] -mt-1">
           맨 위 흐르는 핑크 배너 문구입니다. 언어별로 입력하며, 비워두면 기본 문구가 표시됩니다.
+          <br />
+          Nội dung băng hồng chạy trên cùng. Nhập theo ngôn ngữ; để trống sẽ dùng mặc định.
         </p>
         <div>
           <label className="text-sm font-semibold block mb-1">🇰🇷 한국어</label>
@@ -74,23 +76,23 @@ export default function AdminSettingsForm({ initial }: { initial: Settings }) {
         </div>
       </Section>
 
-      <Section title="🏢 회사 정보">
-        <Field label="회사명" value={form.companyName} onChange={(v) => set("companyName", v)} />
+      <Section title="🏢 회사 정보 / Thông tin công ty">
+        <Field label="회사명 / Tên công ty" value={form.companyName} onChange={(v) => set("companyName", v)} />
         <div className="grid sm:grid-cols-2 gap-4">
-          <Field label="대표자" value={form.ceo} onChange={(v) => set("ceo", v)} />
-          <Field label="개인정보보호책임자" value={form.privacyOfficer} onChange={(v) => set("privacyOfficer", v)} />
+          <Field label="대표자 / Người đại diện" value={form.ceo} onChange={(v) => set("ceo", v)} />
+          <Field label="개인정보보호책임자 / Phụ trách BVTT cá nhân" value={form.privacyOfficer} onChange={(v) => set("privacyOfficer", v)} />
         </div>
         <div className="grid sm:grid-cols-2 gap-4">
-          <Field label="사업자등록번호" value={form.bizNumber} onChange={(v) => set("bizNumber", v)} />
-          <Field label="통신판매업신고번호" value={form.mailOrderNumber} onChange={(v) => set("mailOrderNumber", v)} />
+          <Field label="사업자등록번호 / Mã số doanh nghiệp" value={form.bizNumber} onChange={(v) => set("bizNumber", v)} />
+          <Field label="통신판매업신고번호 / Số ĐK bán hàng online" value={form.mailOrderNumber} onChange={(v) => set("mailOrderNumber", v)} />
         </div>
-        <Field label="주소" value={form.address} onChange={(v) => set("address", v)} />
+        <Field label="주소 / Địa chỉ" value={form.address} onChange={(v) => set("address", v)} />
       </Section>
 
-      <Section title="📞 고객센터">
-        <Field label="고객센터 번호" value={form.phone} onChange={(v) => set("phone", v)} />
+      <Section title="📞 고객센터 / Chăm sóc khách hàng">
+        <Field label="고객센터 번호 / Số hotline" value={form.phone} onChange={(v) => set("phone", v)} />
         <div>
-          <label className="text-sm font-semibold block mb-1">운영시간 (줄바꿈으로 여러 줄)</label>
+          <label className="text-sm font-semibold block mb-1">운영시간 / Giờ làm việc (여러 줄 / nhiều dòng)</label>
           <textarea
             value={form.hours}
             onChange={(e) => set("hours", e.target.value)}
@@ -100,7 +102,7 @@ export default function AdminSettingsForm({ initial }: { initial: Settings }) {
         </div>
       </Section>
 
-      <Section title="🔗 SNS 링크 (전체 URL)">
+      <Section title="🔗 SNS 링크 (전체 URL) / Mạng xã hội (URL đầy đủ)">
         <Field label="Instagram" value={form.instagram} onChange={(v) => set("instagram", v)} placeholder="https://instagram.com/..." />
         <Field label="YouTube" value={form.youtube} onChange={(v) => set("youtube", v)} placeholder="https://youtube.com/..." />
         <Field label="X (Twitter)" value={form.twitter} onChange={(v) => set("twitter", v)} placeholder="https://x.com/..." />
@@ -112,7 +114,7 @@ export default function AdminSettingsForm({ initial }: { initial: Settings }) {
           disabled={saving}
           className="px-7 py-3 rounded-xl bg-[var(--color-primary)] text-white font-bold hover:bg-[var(--color-primary-dark)] disabled:opacity-60 shadow-lg"
         >
-          {saving ? "저장 중..." : "저장하기"}
+          {saving ? "저장 중... / Đang lưu..." : "저장하기 / Lưu"}
         </button>
         {msg && <span className="text-sm font-semibold">{msg}</span>}
       </div>

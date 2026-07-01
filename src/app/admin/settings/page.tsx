@@ -17,11 +17,13 @@ export default async function SettingsPage() {
   return (
     <div className="container-x py-8">
       <Link href="/admin" className="text-sm text-[var(--color-muted)] hover:text-[var(--color-primary)] flex items-center gap-1">
-        <ArrowLeft size={16} /> 관리자로 돌아가기
+        <ArrowLeft size={16} /> 관리자로 돌아가기 / Quay lại quản trị
       </Link>
-      <h1 className="text-3xl font-black my-6">⚙️ 사이트 설정</h1>
+      <h1 className="text-3xl font-black my-6">⚙️ 사이트 설정 / Cài đặt trang web</h1>
       <p className="text-sm text-[var(--color-muted)] mb-6">
         하단 푸터에 표시되는 회사 정보·고객센터·SNS를 수정합니다. 저장하면 즉시 반영됩니다.
+        <br />
+        Chỉnh sửa thông tin công ty · CSKH · mạng xã hội ở chân trang. Lưu là áp dụng ngay.
       </p>
       <AdminSettingsForm
         initial={{
