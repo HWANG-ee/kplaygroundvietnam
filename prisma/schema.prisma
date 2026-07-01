@@ -125,5 +125,9 @@ model SiteSetting {
   instagram       String   @default("#")
   youtube         String   @default("#")
   twitter         String   @default("#")
+  // 상단 흐르는 공지(마퀴) — 언어별. 비우면 기본 다국어 문구 사용
+  announceKo      String   @default("")
+  announceVi      String   @default("")
+  announceEn      String   @default("")
   updatedAt       DateTime @updatedAt
 }

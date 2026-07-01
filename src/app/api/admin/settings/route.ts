@@ -14,6 +14,9 @@ const FIELDS = [
   "instagram",
   "youtube",
   "twitter",
+  "announceKo",
+  "announceVi",
+  "announceEn",
 ] as const;
 
 export async function PUT(req: NextRequest) {

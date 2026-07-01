@@ -15,6 +15,9 @@ type Settings = {
   instagram: string;
   youtube: string;
   twitter: string;
+  announceKo: string;
+  announceVi: string;
+  announceEn: string;
 };
 
 export default function AdminSettingsForm({ initial }: { initial: Settings }) {
@@ -47,6 +50,30 @@ export default function AdminSettingsForm({ initial }: { initial: Settings }) {
 
   return (
     <div className="space-y-6 max-w-2xl">
+      <Section title="📢 상단 공지 (흐르는 배너)">
+        <p className="text-xs text-[var(--color-muted)] -mt-1">
+          맨 위 흐르는 핑크 배너 문구입니다. 언어별로 입력하며, 비워두면 기본 문구가 표시됩니다.
+        </p>
+        <div>
+          <label className="text-sm font-semibold block mb-1">🇰🇷 한국어</label>
+          <textarea value={form.announceKo} onChange={(e) => set("announceKo", e.target.value)} rows={2}
+            placeholder="비우면 기본 문구 사용"
+            className="w-full px-4 py-2.5 rounded-xl border border-pink-100 focus:border-[var(--color-primary)] outline-none" />
+        </div>
+        <div>
+          <label className="text-sm font-semibold block mb-1">🇻🇳 Tiếng Việt</label>
+          <textarea value={form.announceVi} onChange={(e) => set("announceVi", e.target.value)} rows={2}
+            placeholder="Để trống sẽ dùng nội dung mặc định"
+            className="w-full px-4 py-2.5 rounded-xl border border-pink-100 focus:border-[var(--color-primary)] outline-none" />
+        </div>
+        <div>
+          <label className="text-sm font-semibold block mb-1">🇬🇧 English</label>
+          <textarea value={form.announceEn} onChange={(e) => set("announceEn", e.target.value)} rows={2}
+            placeholder="Leave empty to use default"
+            className="w-full px-4 py-2.5 rounded-xl border border-pink-100 focus:border-[var(--color-primary)] outline-none" />
+        </div>
+      </Section>
+
       <Section title="🏢 회사 정보">
         <Field label="회사명" value={form.companyName} onChange={(v) => set("companyName", v)} />
         <div className="grid sm:grid-cols-2 gap-4">

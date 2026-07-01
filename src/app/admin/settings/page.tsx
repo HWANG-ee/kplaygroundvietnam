@@ -36,6 +36,9 @@ export default async function SettingsPage() {
           instagram: s.instagram,
           youtube: s.youtube,
           twitter: s.twitter,
+          announceKo: s.announceKo,
+          announceVi: s.announceVi,
+          announceEn: s.announceEn,
         }}
       />
     </div>

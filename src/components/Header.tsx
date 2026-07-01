@@ -35,9 +35,11 @@ const TRENDING = ["AURORA", "응원봉", "포토카드", "시즌그리팅", "핫
 export default function Header({
   user,
   categories,
+  announce,
 }: {
   user: SessionUser;
   categories: Cat[];
+  announce: string;
 }) {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
@@ -63,7 +65,7 @@ export default function Header({
         <div className="animate-marquee inline-block">
           {Array.from({ length: 2 }).map((_, i) => (
             <span key={i} className="mx-6">
-              {t.header.announce}
+              {announce}
             </span>
           ))}
         </div>

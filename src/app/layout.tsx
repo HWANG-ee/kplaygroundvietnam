@@ -9,6 +9,7 @@ import { LOCALE_META } from "@/lib/i18n/config";
 import { MESSAGES } from "@/lib/i18n/messages";
 import { I18nProvider } from "@/components/i18n/I18nProvider";
 import { SessionProvider } from "@/components/SessionProvider";
+import { getSiteSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
   title: "K-PLAYGROUND · 케이플레이그라운드 | K-POP 앨범 & 굿즈샵",
@@ -21,11 +22,17 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [user, categories, locale] = await Promise.all([
+  const [user, categories, locale, settings] = await Promise.all([
     getCurrentUser(),
     prisma.category.findMany({ orderBy: { order: "asc" } }),
     getLocale(),
+    getSiteSettings(),
   ]);
+
+  // 언어별 공지: 관리자가 입력했으면 그걸, 비었으면 기본 다국어 문구
+  const customAnnounce =
+    locale === "ko" ? settings.announceKo : locale === "en" ? settings.announceEn : settings.announceVi;
+  const announce = customAnnounce.trim() ? customAnnounce : MESSAGES[locale].header.announce;
 
   return (
     <html lang={LOCALE_META[locale].htmlLang}>
@@ -38,7 +45,7 @@ export default async function RootLayout({
       <body>
         <I18nProvider locale={locale} messages={MESSAGES[locale]}>
           <SessionProvider isStaff={isStaff(user?.role)}>
-            <Header user={user} categories={categories} />
+            <Header user={user} categories={categories} announce={announce} />
             <main className="min-h-[60vh]">{children}</main>
             <Footer />
           </SessionProvider>
