@@ -33,15 +33,23 @@ export async function POST(req: NextRequest) {
     const filename = `${randomUUID()}.${ext}`;
     const bytes = Buffer.from(await file.arrayBuffer());
 
-    // 1) Vercel Blob 연결됨(BLOB_READ_WRITE_TOKEN 존재) → 클라우드 영구 저장
-    if (process.env.BLOB_READ_WRITE_TOKEN) {
-      const { put } = await import("@vercel/blob");
-      const blob = await put(`uploads/${filename}`, bytes, {
-        access: "public",
-        contentType: file.type,
-        addRandomSuffix: false,
-      });
-      return NextResponse.json({ ok: true, url: blob.url });
+    // 1) Vercel Blob 연결됨(토큰 또는 스토어ID 존재) → 클라우드 영구 저장
+    if (process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID) {
+      try {
+        const { put } = await import("@vercel/blob");
+        const blob = await put(`uploads/${filename}`, bytes, {
+          access: "public",
+          contentType: file.type,
+          addRandomSuffix: false,
+        });
+        return NextResponse.json({ ok: true, url: blob.url });
+      } catch (err) {
+        console.error("Vercel Blob upload failed:", err);
+        return NextResponse.json(
+          { error: "Blob 업로드 실패: " + (err instanceof Error ? err.message : "unknown") },
+          { status: 500 }
+        );
+      }
     }
 
     // 2) 서버리스(Vercel)인데 Blob 미연결 → 파일 저장 불가 안내
