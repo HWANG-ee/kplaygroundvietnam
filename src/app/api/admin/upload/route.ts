@@ -13,18 +13,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "권한이 없습니다." }, { status: 403 });
   }
 
-  // Vercel 등 서버리스 환경은 파일 저장이 불가(읽기 전용 FS).
-  // 운영에서는 이미지 URL 붙여넣기 또는 자동 커버를 사용하세요.
-  if (process.env.VERCEL) {
-    return NextResponse.json(
-      {
-        error:
-          "운영 환경에서는 파일 업로드가 비활성화되어 있습니다. 이미지 URL을 붙여넣거나 자동 커버를 사용하세요. (영구 업로드는 Vercel Blob 연결 시 가능)",
-      },
-      { status: 501 }
-    );
-  }
-
   try {
     const form = await req.formData();
     const file = form.get("file") as File | null;
@@ -43,11 +31,34 @@ export async function POST(req: NextRequest) {
 
     const ext = (file.name.split(".").pop() || "png").toLowerCase().replace(/[^a-z0-9]/g, "");
     const filename = `${randomUUID()}.${ext}`;
+    const bytes = Buffer.from(await file.arrayBuffer());
+
+    // 1) Vercel Blob 연결됨(BLOB_READ_WRITE_TOKEN 존재) → 클라우드 영구 저장
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+      const { put } = await import("@vercel/blob");
+      const blob = await put(`uploads/${filename}`, bytes, {
+        access: "public",
+        contentType: file.type,
+        addRandomSuffix: false,
+      });
+      return NextResponse.json({ ok: true, url: blob.url });
+    }
+
+    // 2) 서버리스(Vercel)인데 Blob 미연결 → 파일 저장 불가 안내
+    if (process.env.VERCEL) {
+      return NextResponse.json(
+        {
+          error:
+            "이미지 업로드를 사용하려면 Vercel Blob 연결이 필요합니다. (Storage → Blob 연결 후 재배포) 또는 이미지 URL을 붙여넣으세요.",
+        },
+        { status: 501 }
+      );
+    }
+
+    // 3) 로컬 개발 → public/uploads 에 저장
     const dir = path.join(process.cwd(), "public", "uploads");
     await mkdir(dir, { recursive: true });
-    const bytes = Buffer.from(await file.arrayBuffer());
     await writeFile(path.join(dir, filename), bytes);
-
     return NextResponse.json({ ok: true, url: `/uploads/${filename}` });
   } catch (e) {
     console.error(e);
