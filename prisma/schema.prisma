@@ -129,5 +129,9 @@ model SiteSetting {
   announceKo      String   @default("")
   announceVi      String   @default("")
   announceEn      String   @default("")
+  // 메인(Hero) 배너 이미지 URL — 비우면 기본 디자인 사용
+  heroMainImage   String   @default("")
+  heroHotImage    String   @default("")
+  heroGoodsImage  String   @default("")
   updatedAt       DateTime @updatedAt
 }

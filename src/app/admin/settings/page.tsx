@@ -41,6 +41,9 @@ export default async function SettingsPage() {
           announceKo: s.announceKo,
           announceVi: s.announceVi,
           announceEn: s.announceEn,
+          heroMainImage: s.heroMainImage,
+          heroHotImage: s.heroHotImage,
+          heroGoodsImage: s.heroGoodsImage,
         }}
       />
     </div>

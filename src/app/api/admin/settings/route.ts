@@ -17,6 +17,9 @@ const FIELDS = [
   "announceKo",
   "announceVi",
   "announceEn",
+  "heroMainImage",
+  "heroHotImage",
+  "heroGoodsImage",
 ] as const;
 
 export async function PUT(req: NextRequest) {
