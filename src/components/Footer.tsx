@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { Instagram, Youtube, Twitter, Sparkles } from "lucide-react";
 import { getDict } from "@/lib/i18n/server";
+import { getSiteSettings } from "@/lib/settings";
 
 export default async function Footer() {
-  const { t } = await getDict();
+  const [{ t }, s] = await Promise.all([getDict(), getSiteSettings()]);
   return (
     <footer className="mt-20 bg-[var(--color-ink)] text-white/80">
       <div className="container-x py-12">
@@ -19,9 +20,9 @@ export default async function Footer() {
               {t.footer.tagline}
             </p>
             <div className="flex gap-3 mt-4">
-              <a href="#" className="hover:text-[var(--color-primary)]"><Instagram size={20} /></a>
-              <a href="#" className="hover:text-[var(--color-primary)]"><Youtube size={20} /></a>
-              <a href="#" className="hover:text-[var(--color-primary)]"><Twitter size={20} /></a>
+              <a href={s.instagram || "#"} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--color-primary)]"><Instagram size={20} /></a>
+              <a href={s.youtube || "#"} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--color-primary)]"><Youtube size={20} /></a>
+              <a href={s.twitter || "#"} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--color-primary)]"><Twitter size={20} /></a>
             </div>
           </div>
           <div>
@@ -44,19 +45,19 @@ export default async function Footer() {
           </div>
           <div>
             <p className="font-bold text-white mb-3">{t.footer.csCenter}</p>
-            <p className="text-2xl font-black text-white">1670-0000</p>
+            <p className="text-2xl font-black text-white">{s.phone}</p>
             <p className="text-sm text-white/60 mt-2 whitespace-pre-line">
-              {t.footer.hours}
+              {s.hours}
             </p>
           </div>
         </div>
         <div className="border-t border-white/10 pt-6 text-xs text-white/40 leading-relaxed">
           <p>
-            (주)케이플레이그라운드 · 대표 홍길동 · 사업자등록번호 000-00-00000 ·
-            통신판매업신고 2026-서울강남-00000
+            {s.companyName} · 대표 {s.ceo} · 사업자등록번호 {s.bizNumber} ·
+            통신판매업신고 {s.mailOrderNumber}
           </p>
           <p className="mt-1">
-            서울특별시 강남구 케이팝로 42, 3층 · 개인정보보호책임자 김덕질
+            {s.address} · 개인정보보호책임자 {s.privacyOfficer}
           </p>
           <p className="mt-3">
             © 2026 K-PLAYGROUND. {t.footer.demoNote}

@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser, isStaff, isAdmin } from "@/lib/auth";
 import { won } from "@/lib/format";
 import AdminProductTable from "@/components/admin/AdminProductTable";
-import { Plus, Package, ShoppingBag, Users, Coins, BarChart3 } from "lucide-react";
+import { Plus, Package, ShoppingBag, Users, Coins, BarChart3, Settings } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -73,6 +73,14 @@ export default async function AdminPage() {
               className="flex items-center gap-2 px-5 py-3 rounded-xl bg-white ring-1 ring-pink-100 font-bold hover:ring-[var(--color-primary)]"
             >
               <BarChart3 size={20} /> 매출 분석
+            </Link>
+          )}
+          {admin && (
+            <Link
+              href="/admin/settings"
+              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-white ring-1 ring-pink-100 font-bold hover:ring-[var(--color-primary)]"
+            >
+              <Settings size={20} /> 사이트 설정
             </Link>
           )}
           <Link

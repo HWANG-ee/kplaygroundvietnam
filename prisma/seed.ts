@@ -188,7 +188,10 @@ async function main() {
     },
   });
 
-  console.log(`✅ ${categories.length} categories, ${products.length} products, 3 users`);
+  // 사이트 설정(싱글톤) 기본값
+  await prisma.siteSetting.upsert({ where: { id: "site" }, update: {}, create: { id: "site" } });
+
+  console.log(`✅ ${categories.length} categories, ${products.length} products, 3 users, site settings`);
 }
 
 main()
