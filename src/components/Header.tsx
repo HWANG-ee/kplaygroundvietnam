@@ -16,7 +16,7 @@ import { useCart } from "@/store/cart";
 import { useEffect } from "react";
 import { useI18n } from "@/components/i18n/I18nProvider";
 import LangSwitcher from "@/components/i18n/LangSwitcher";
-import { categoryName, type Messages } from "@/lib/i18n/messages";
+import { type Messages } from "@/lib/i18n/messages";
 
 type Cat = { slug: string; name: string; kind: string };
 type SessionUser = { id: string; name: string; role: string } | null;
@@ -262,7 +262,7 @@ export default function Header({
                   onClick={() => setOpen(false)}
                   className="block py-1.5 text-sm"
                 >
-                  {categoryName(t, c.slug, c.name)}
+                  {c.name}
                 </Link>
               ))}
             </div>
@@ -275,7 +275,7 @@ export default function Header({
                   onClick={() => setOpen(false)}
                   className="block py-1.5 text-sm"
                 >
-                  {categoryName(t, c.slug, c.name)}
+                  {c.name}
                 </Link>
               ))}
             </div>
@@ -312,7 +312,7 @@ function CategoryMenu({ albums, goods }: { albums: Cat[]; goods: Cat[] }) {
                     href={`/category/${c.slug}`}
                     className="block text-sm hover:text-[var(--color-primary)]"
                   >
-                    {categoryName(t, c.slug, c.name)}
+                    {c.name}
                   </Link>
                 ))}
               </div>
@@ -328,7 +328,7 @@ function CategoryMenu({ albums, goods }: { albums: Cat[]; goods: Cat[] }) {
                     href={`/category/${c.slug}`}
                     className="block text-sm hover:text-[var(--color-secondary)]"
                   >
-                    {categoryName(t, c.slug, c.name)}
+                    {c.name}
                   </Link>
                 ))}
               </div>

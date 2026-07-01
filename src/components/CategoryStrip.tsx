@@ -1,35 +1,35 @@
 import Link from "next/link";
-import { getDict } from "@/lib/i18n/server";
-import { categoryName } from "@/lib/i18n/messages";
+import { prisma } from "@/lib/prisma";
 
-const ITEMS = [
-  { slug: "kpop-album", name: "K-POP 앨범", emoji: "💿" },
-  { slug: "ost", name: "OST", emoji: "🎬" },
-  { slug: "vinyl", name: "LP/바이닐", emoji: "🎵" },
-  { slug: "season", name: "시즌그리팅", emoji: "📅" },
-  { slug: "lightstick", name: "응원봉", emoji: "🔦" },
-  { slug: "photocard", name: "포토카드", emoji: "🎴" },
-  { slug: "apparel", name: "의류", emoji: "👕" },
-  { slug: "stationery", name: "문구/리빙", emoji: "📔" },
-];
+// slug별 아이콘(이모지). 관리자가 추가한 새 카테고리는 기본 아이콘 사용.
+const EMOJI: Record<string, string> = {
+  "kpop-album": "💿",
+  ost: "🎬",
+  vinyl: "🎵",
+  season: "📅",
+  lightstick: "🔦",
+  photocard: "🎴",
+  apparel: "👕",
+  stationery: "📔",
+};
 
 export default async function CategoryStrip() {
-  const { t } = await getDict();
+  const cats = await prisma.category.findMany({ orderBy: { order: "asc" }, take: 8 });
+  if (cats.length === 0) return null;
+
   return (
     <section className="py-4">
       <div className="grid grid-cols-4 md:grid-cols-8 gap-3">
-        {ITEMS.map((it) => (
+        {cats.map((c) => (
           <Link
-            key={it.slug}
-            href={`/category/${it.slug}`}
+            key={c.slug}
+            href={`/category/${c.slug}`}
             className="flex flex-col items-center gap-2 group"
           >
             <span className="w-16 h-16 grid place-items-center text-3xl rounded-2xl bg-white shadow-sm ring-1 ring-pink-100 group-hover:-translate-y-1 group-hover:ring-[var(--color-primary)] transition">
-              {it.emoji}
+              {EMOJI[c.slug] || (c.kind === "goods" ? "🛍️" : "🎵")}
             </span>
-            <span className="text-xs font-semibold text-center">
-              {categoryName(t, it.slug, it.name)}
-            </span>
+            <span className="text-xs font-semibold text-center line-clamp-2">{c.name}</span>
           </Link>
         ))}
       </div>
